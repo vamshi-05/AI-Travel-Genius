@@ -1,6 +1,6 @@
 // ChatbotIcon.jsx
 import React from 'react';
-import './chatboticon.css'; // Make sure to create the CSS file
+// import './chatboticon.css'; // Make sure to create the CSS file
 import Image from './image.png'
 import { useNavigate } from "react-router-dom";
 const ChatBotIcon = () => {
