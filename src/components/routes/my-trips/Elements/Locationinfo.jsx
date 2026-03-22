@@ -54,25 +54,31 @@ function Locationinfo() {
 
   const randomCompliment =
     compliments[Math.floor(Math.random() * compliments.length)];
-
-  const city = trip?.tripData?.location;
+  const city = trip?.tripData?.[0]?.location || trip?.userSelection?.location;
 
   const getCityInfo = async () => {
+    if (!city) return;
+
     const data = {
       textQuery: city,
     };
-    const result = await getCityDetails(data)
+    await getCityDetails(data)
       .then((res) => {
-        setCityDets(res.data.places[0]);
-        setAllImages(res.data.places[0].photos);
-        setPhotos(res.data.places[0].photos[0].name);
+        const place = res?.data?.places?.[0];
+        if (!place) return;
+
+        setCityDets(place);
+        setAllImages(place?.photos || []);
+        setPhotos(place?.photos?.[0]?.name || "");
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    trip && getCityInfo();
-  }, [trip]);
+    if (city) {
+      getCityInfo();
+    }
+  }, [city]);
 
   const getUrl = (name) => {
     return PHOTO_URL.replace("{replace}", name);

@@ -5,7 +5,7 @@ export const LogInContext = createContext(null);
 
 export const LogInContextProvider = (props) => {
     const { user, loginWithPopup, logout, isAuthenticated } = useAuth0();
-    const [trip, setTrip] = useState([]);
+    const [trip, setTrip] = useState(null);
     return (
         <LogInContext.Provider value={{user, loginWithPopup, logout, isAuthenticated, trip, setTrip}}>
             {props.children}

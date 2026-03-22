@@ -12,21 +12,36 @@ import Places from '../Elements/Places';
 function Mytrips() {
   const { tripId } = useParams();
   const { setTrip} = useContext(LogInContext);
+  const [isLoading, setIsLoading] = useState(true);
   
   const getTripData = async () => {
-    const docRef = doc(db, 'Trips', tripId);
-    const docSnap = await getDoc(docRef);
+    if (!tripId) return;
 
-    if(docSnap.exists()){
-      setTrip(docSnap.data());
-    } else {
-      toast.error('No Such Trip');
+    try {
+      setIsLoading(true);
+      const docRef = doc(db, 'Trips', tripId);
+      const docSnap = await getDoc(docRef);
+
+      if(docSnap.exists()){
+        setTrip(docSnap.data());
+      } else {
+        toast.error('No Such Trip');
+      }
+    } catch (error) {
+      toast.error('Unable to load trip data');
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(()=>{
     tripId && getTripData();
   }, [tripId]);
+
+  if (isLoading) {
+    return <div className='py-8 text-center opacity-80'>Loading trip...</div>;
+  }
   
 
   return (

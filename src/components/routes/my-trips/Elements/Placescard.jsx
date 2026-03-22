@@ -9,14 +9,22 @@ function Placescard() {
   // const isSmall = useMediaQuery({ query: "(max-width: 640px)" });
 
   const { trip } = useContext(LogInContext);
-  const itinerary = trip?.tripData?.itinerary;
-  const city = trip?.tripData?.location;
+  const itinerary = trip?.tripData?.[0]?.itinerary;
+  const city = trip?.tripData?.[0]?.location;
 
   const { placesRef } = useRefContext();
 
+  if (!trip || !itinerary?.length) {
+    return (
+      <div className="text-center opacity-80 py-4">
+        Places will appear once trip data is loaded.
+      </div>
+    );
+  }
+
   return (
     <>
-      {itinerary?.map((day, idx) => {
+      {itinerary.map((day, idx) => {
         return (
           <div ref={placesRef} key={idx} className="main-container mt-5 sm:mt-10">
             <div className="places-heading text-center my-5">
@@ -28,7 +36,7 @@ function Placescard() {
               </h4>
             </div>
             <div className="cards flex flex-col md:flex-row flex-wrap gap-5">
-              {day.places.map((place, idx) => {
+              {day.schedule.map((place, idx) => {
                 return (
                   <div key={idx} className="md:w-[48%]">
                     <PlaceCards className="place-card" place={place} />
